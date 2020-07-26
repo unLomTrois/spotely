@@ -1,1 +1,3 @@
-console.log('Hello Template');
+import { bot } from './bot.js';
+
+bot.launch();
