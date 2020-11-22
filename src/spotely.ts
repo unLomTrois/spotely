@@ -35,8 +35,11 @@ class Spotely {
       console.log('Response time: %sms', ms);
     });
 
-    this.bot.start((ctx) => ctx.reply('Welcome'));
-    this.bot.help((ctx) => ctx.reply('Send me a sticker'));
+    this.bot.start((ctx) => {
+      ctx.reply('Spotify-link to Youtube-link conversion bot.');
+      ctx.reply('Write /search <spotify-link> and get youtube-link');
+    });
+    this.bot.help((ctx) => ctx.reply('Write /search <spotify-link> and get youtube-link'));
 
     this.bot.command('/search', async (ctx) => {
       const url: string | undefined = ctx.message?.text?.split(' ')[1];
@@ -54,11 +57,15 @@ class Spotely {
 
         const track_data = await this.spotify.getTrack(url);
 
-        const external_ids: string = track_data.external_ids.isrc;
+        const query: string = track_data.artists[0].name + ' ' + track_data.name;
 
-        const video = await this.youtube.getVideoLink(external_ids);
+        const video = await this.youtube.getVideoLink(query).catch((err) => {
+          console.error(err);
+        });
 
-        ctx.reply(video);
+        ctx.reply(video || 'not found');
+      } else {
+        ctx.reply('no link provided');
       }
     });
   };
