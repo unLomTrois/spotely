@@ -9,9 +9,9 @@ class YoutubeWrapper {
   }
 
   public getVideoLink = async (query: string): Promise<string> => {
-    return fetch(
-      `https://www.googleapis.com/youtube/v3/search?part=id&videoCategoryId=${this.category}&maxResults=1&q=${query}&type=video&key=${this.key}`
-    )
+    const link = `https://www.googleapis.com/youtube/v3/search?part=id&videoCategoryId=${this.category}&maxResults=20&q=${query}&type=video&key=${this.key}`;
+
+    return fetch(encodeURI(link))
       .then((res) => res.json())
       .then((list) => list.items[0])
       .then((item) => item.id.videoId)
