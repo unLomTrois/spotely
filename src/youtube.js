@@ -34,7 +34,7 @@ class YoutubeWrapper {
         return list.items[0];
       })
       .then((item) => item.id.videoId)
-      .then((videoId) => buildLink(videoId));
+      .then((videoId) => this.buildLink(videoId));
   };
 
   buildLink = (videoId) => `https://youtu.be/${videoId}`;
