@@ -9,8 +9,6 @@
     "node": "15.x"
   },
   "scripts": {
-    "build": "rm -rf ./build && tsc -b tsconfig.json",
-    "diagnose:ts": "tsc -b tsconfig.json --extendedDiagnostics",
     "start": "node src/index.js"
   },
   "devDependencies": {
