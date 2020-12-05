@@ -1,8 +1,6 @@
-# application folders
-build
-
-# security configs
-src/config/security
-
 # modules
 node_modules
+
+# local
+.env
+.vscode

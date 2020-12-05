@@ -1,43 +1,31 @@
 {
-  "name": "node-typescript-template",
+  "name": "spotely-telegram-bot",
   "version": "0.5.0",
   "description": "",
   "private": true,
   "type": "module",
+  "main": "src/index.js",
   "scripts": {
-    "build:ts": "rm -rf ./build && tsc -b tsconfig.json",
+    "build": "rm -rf ./build && tsc -b tsconfig.json",
     "diagnose:ts": "tsc -b tsconfig.json --extendedDiagnostics",
-    "start": "node --experimental-json-modules build/index.js"
+    "start": "node src/index.js"
   },
-  "keywords": [
-    "typescript",
-    "template",
-    "eslint",
-    "prettier"
-  ],
   "devDependencies": {
     "@types/is-url": "^1.2.28",
     "@types/js-base64": "^3.0.0",
     "@types/node": "^14.0.26",
-    "@types/node-fetch": "^2.5.7",
-    "@typescript-eslint/eslint-plugin": "^3.7.0",
-    "@typescript-eslint/parser": "^3.7.0",
-    "eslint": "^7.5.0",
-    "eslint-config-prettier": "^6.11.0",
-    "eslint-plugin-prettier": "^3.1.4",
-    "prettier": "^2.0.5"
+    "@types/node-fetch": "^2.5.7"
   },
   "dependencies": {
     "is-url": "^1.2.4",
     "js-base64": "^3.2.4",
     "node-fetch": "^2.6.0",
     "spotify-uri": "^2.0.0",
-    "telegraf": "^3.38.0",
-    "typescript": "^3.9.7"
+    "telegraf": "^3.38.0"
   },
   "author": {
     "name": "unLomTrois",
     "email": "unlomtrois@protonmail.com",
-    "url": "https://github.com/unLomTrois"
+    "url": "https://github.com/unlomtrois"
   }
 }
