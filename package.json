@@ -5,6 +5,9 @@
   "private": true,
   "type": "module",
   "main": "src/index.js",
+  "engines": {
+    "node": "15.x"
+  },
   "scripts": {
     "build": "rm -rf ./build && tsc -b tsconfig.json",
     "diagnose:ts": "tsc -b tsconfig.json --extendedDiagnostics",
