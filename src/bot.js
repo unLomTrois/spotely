@@ -65,7 +65,7 @@ bot.on("text", async (ctx) => {
 
         const link = spotify_track_data.external_urls.spotify;
 
-        ctx.reply(link);
+        ctx.reply(link || "Не найдено 😓");
       }
     } else {
       ctx.reply("Вы отправили не ссылку 😕");
