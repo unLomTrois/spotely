@@ -32,12 +32,12 @@ class SpotifyWrapper {
 
     console.log(link);
 
-    const track = fetch(encodeURI(link), {
+    const track = fetch(encodeURI(link).replace(/#/g, '%23'), {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${this.access_token ?? (await this.getAuth())}`
       }
-    }).then(res => res.json()).then(data => data.tracks.items[0])
+    }).then(res => res.json()).then(data => data.tracks)
 
     return track;
   }

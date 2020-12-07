@@ -25,9 +25,14 @@ const purify_title = (title) => {
   return title
     .split("-", 2)
     .join("")
+    .toLowerCase()
     .replace("  ", " ")
     .replace(/ \((.*?)\)/, "")
-    .replace(/ \[(.*?)\]/, "");
+    .replace(/ \[(.*?)\]/, "")
+    .replace("mv", "")
+    .replace("music video", "")
+    // japanese
+    .replace(/［(.*?)］/, "")
 };
 
 bot.on("text", async (ctx) => {
@@ -46,7 +51,7 @@ bot.on("text", async (ctx) => {
           console.error(err);
         });
 
-        ctx.reply(video || "Не найдено 😓");
+        ctx.reply(video || "Ничего не найдено 😓");
       }
 
       if (url.includes("youtube.com/watch") || url.includes("youtu.be/")) {
@@ -59,19 +64,22 @@ bot.on("text", async (ctx) => {
 
           const track_title = video_data.snippet.title;
 
-          const track_query = track_title.includes("-")
+          const track_query = track_title.includes("-") || track_title.includes("『")
             ? track_title
             : artist_title + " " + track_title;
 
-          const spotify_track_data = await spotify.getTrackbyName(
-            purify_title(track_query)
-          );
-
-          console.log(spotify_track_data);
-
-          const link = spotify_track_data.external_urls?.spotify;
-
-          ctx.reply(link || "Не найдено 😓");
+          try {
+            const spotify_track_data = await spotify.getTrackbyName(
+              purify_title(track_query)
+            );
+  
+            const link = spotify_track_data?.items[0]?.external_urls?.spotify;
+  
+            ctx.reply(link || "Ничего не найдено 😓");
+          } catch (error) {
+            console.error(error)
+            ctx.reply("Ничего не найдено 😓")
+          }
         } else {
           ctx.reply(
             "Видео не музыкальной категории, найдите что-нибудь другое 😓"
