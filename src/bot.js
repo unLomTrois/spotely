@@ -24,7 +24,7 @@ bot.help((ctx) => ctx.reply(start_help_text));
 bot.on("text", async (ctx) => {
   const url = ctx.message?.text;
 
-  console.log(ctx.message.from.username, url)
+  console.log(ctx.message.from.username, url);
 
   if (url !== undefined) {
     if (isUrl(url)) {
@@ -40,32 +40,33 @@ bot.on("text", async (ctx) => {
         ctx.reply(video || "Не найдено 😓");
       }
 
-      if (
-        url.includes("youtube.com/watch?v=EYHv8eJrW2Y") ||
-        url.includes("youtu.be/")
-      ) {
+      if (url.includes("youtube.com/watch") || url.includes("youtu.be/")) {
         const video_data = await youtube.getVideoInfo(url);
 
-        if (video_data.categoryId !== 10) {
+        if (video_data.snippet.categoryId == 10) {
+          const artist_title = video_data.snippet.channelTitle.includes(
+            " - Topic"
+          )
+            ? video_data.snippet.channelTitle.replace(" - Topic", "")
+            : video_data.snippet.channelTitle;
+
+          const track_title = video_data.snippet.title;
+
+          const track_query = track_title.includes(artist_title)
+            ? track_query
+            : artist_title + " " + track_title;
+
+          const spotify_track_data = await spotify.getTrackbyName(track_query.replace("-", ""));
+
+          const link = spotify_track_data.external_urls.spotify;
+
+          ctx.reply(link || "Не найдено 😓");
+        } else {
           ctx.reply(
-            "Видео не музыкальной категории, найдите что-нибудь другое"
+            "Видео не музыкальной категории, найдите что-нибудь другое 😓"
           );
           return;
         }
-
-        const artist_title = video_data.snippet.channelTitle.includes(
-          " - Topic"
-        )
-          ? video_data.snippet.channelTitle.replace(" - Topic", "")
-          : video_data.snippet.channelTitle;
-
-        const video_title = artist_title + " " + video_data.snippet.title;
-
-        const spotify_track_data = await spotify.getTrackbyName(video_title);
-
-        const link = spotify_track_data.external_urls.spotify;
-
-        ctx.reply(link || "Не найдено 😓");
       }
     } else {
       ctx.reply("Вы отправили не ссылку 😕");
