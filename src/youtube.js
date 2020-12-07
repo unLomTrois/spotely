@@ -1,4 +1,5 @@
 import fetch from "node-fetch";
+import getVideoId from "get-video-id";
 
 class YoutubeWrapper {
   category = 10; // music category
@@ -38,6 +39,16 @@ class YoutubeWrapper {
   };
 
   buildLink = (videoId) => `https://youtu.be/${videoId}`;
+
+  getVideoInfo = async (url) => {
+    const { id } = getVideoId(url);
+
+    const link = `https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${id}&type=video&key=${this.key}`;
+
+    return fetch(encodeURI(link))
+      .then((res) => res.json())
+      .then((list) => list.items[0])
+  };
 }
 
 const youtube = new YoutubeWrapper(process.env.GOOGLE_API_KEY);

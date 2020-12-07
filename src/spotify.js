@@ -27,6 +27,19 @@ class SpotifyWrapper {
     return track;
   };
 
+  getTrackbyName = async (name) => {
+    const link = `https://api.spotify.com/v1/search?q=${name}&type=track&limit=1`;
+
+    const track = fetch(encodeURI(link), {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${this.access_token ?? (await this.getAuth())}`
+      }
+    }).then(res => res.json()).then(data => data.tracks.items[0])
+
+    return track;
+  }
+
   getTrackID = (link) => {
     return spotifyURI.parse(link).toURI().split(':')[2];
   };

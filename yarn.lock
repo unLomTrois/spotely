@@ -58,6 +58,18 @@ form-data@^3.0.0:
     combined-stream "^1.0.8"
     mime-types "^2.1.12"
 
+get-src@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/get-src/-/get-src-1.0.1.tgz#ca11dbe4a93c7f3aa85cec95fcb0b2dfaa9539ee"
+  integrity sha1-yhHb5Kk8fzqoXOyV/LCy36qVOe4=
+
+get-video-id@^3.1.5:
+  version "3.1.5"
+  resolved "https://registry.yarnpkg.com/get-video-id/-/get-video-id-3.1.5.tgz#69f25ecb77d8021d25476f578e0ede2df5bc61a3"
+  integrity sha512-jAc0aZiMava8lFJB/t/VyVKaYtcB9dVAKH/T7rjkYhnzHQ58WDlG9eKJgbzLJ+x0gPHrT87IvXkTP8tByB3ADg==
+  dependencies:
+    get-src "^1.0.1"
+
 is-url@^1.2.4:
   version "1.2.4"
   resolved "https://registry.yarnpkg.com/is-url/-/is-url-1.2.4.tgz#04a4df46d28c4cff3d73d01ff06abeb318a1aa52"
