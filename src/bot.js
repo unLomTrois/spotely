@@ -1,7 +1,6 @@
 import Telegraf from "telegraf";
 import isUrl from "is-url";
-import fetch from "node-fetch";
-
+import { convertURL, isSpotifyURL, isYoutubeURL } from "./utils.js";
 
 const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN);
 
@@ -17,47 +16,37 @@ bot.use(async (_, next) => {
   console.log("Response time: %sms", ms);
 });
 
-bot.start((ctx) => {
-  ctx.reply(start_help_text);
+bot.start(async (ctx) => {
+  await ctx.reply(start_help_text);
 });
 
 bot.help((ctx) => ctx.reply(start_help_text));
 
 bot.on("text", async (ctx) => {
-  const url = ctx.message?.text;
+  const message = ctx.message?.text;
 
-  console.log(ctx.message.from.username, url);
+  console.log(message);
 
-  if (url !== undefined) {
-    if (isUrl(url)) {
-      if (url.includes("https://open.spotify.com/track/")) {
-        // find youtube
-        const youtube_url = await fetch(
-          `https://api.song.link/v1-alpha.1/links?url=${url}&userCountry=EN`
-        ).then((res) => res.json()).then(res => res.linksByPlatform.youtube?.url)
-
-        ctx.reply(youtube_url || "Ничего не найдено 😓");
-      } else if (
-        url.includes("youtube.com/watch") ||
-        url.includes("youtu.be/") || 
-        url.includes("music.youtube.com/watch")
-      ) {
-        // find spotify
-        const spotify_url = await fetch(
-          `https://api.song.link/v1-alpha.1/links?url=${url}&userCountry=EN`
-        ).then((res) => res.json()).then(res => res.linksByPlatform.spotify?.url)
-
-        ctx.reply(spotify_url || "Ничего не найдено 😓");
-      } else {
-        ctx.reply("Отправьте ссылку на spotify или youtube / youtube music");
-      }
-    } else {
-      ctx.reply("Вы отправили не ссылку 😕");
-      return;
-    }
-  } else {
-    ctx.reply("Вы отправили не ссылку 😕");
+  if (message == undefined) {
+    await ctx.reply("Вы отправили не ссылку 😕");
+    return;
   }
+
+  if (!isUrl(message)) {
+    await ctx.reply("Вы отправили не ссылку 😕");
+    return;
+  }
+
+  const url = message;
+
+  if (!isYoutubeURL(url) && !isSpotifyURL(url)) {
+    await ctx.reply("Отправьте ссылку на spotify, youtube или youtube music");
+    return;
+  }
+
+  const res = await convertURL(url);
+
+  await ctx.reply(res || "Ничего не найдено 😓");
 });
 
 // bot.on('inline_query', (ctx) => {
