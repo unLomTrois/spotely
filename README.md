@@ -1,3 +1,3 @@
 # spotely
 
-A telegram bot for spotify-link conversion to youtube-link.
+A telegram for "converting" Spotify and YouTube links between each other.
