@@ -1,6 +1,6 @@
 import Telegraf from "telegraf";
 import isUrl from "is-url";
-import fetch from "node-fetch";
+import { convertURL, isSpotifyURL, isYoutubeURL } from "./utils.js";
 
 const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN);
 
@@ -39,31 +39,14 @@ bot.on("text", async (ctx) => {
 
   const url = message;
 
-  if (url.includes("https://open.spotify.com/track/")) {
-    // find youtube
-    const youtube_url = await fetch(
-      `https://api.song.link/v1-alpha.1/links?url=${url}&userCountry=EN`
-    )
-      .then((res) => res.json())
-      .then((res) => res.linksByPlatform.youtube?.url);
-
-    await ctx.reply(youtube_url || "Ничего не найдено 😓");
-  } else if (
-    url.includes("youtube.com/watch") ||
-    url.includes("youtu.be/") ||
-    url.includes("music.youtube.com/watch")
-  ) {
-    // find spotify
-    const spotify_url = await fetch(
-      `https://api.song.link/v1-alpha.1/links?url=${url}&userCountry=EN`
-    )
-      .then((res) => res.json())
-      .then((res) => res.linksByPlatform.spotify?.url);
-
-    await ctx.reply(spotify_url || "Ничего не найдено 😓");
-  } else {
-    await ctx.reply("Отправьте ссылку на spotify или youtube / youtube music");
+  if (!isYoutubeURL(url) && !isSpotifyURL(url)) {
+    await ctx.reply("Отправьте ссылку на spotify, youtube или youtube music");
+    return;
   }
+
+  const res = await convertURL(url);
+
+  await ctx.reply(res || "Ничего не найдено 😓");
 });
 
 // bot.on('inline_query', (ctx) => {
