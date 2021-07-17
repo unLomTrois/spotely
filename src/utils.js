@@ -15,7 +15,7 @@ export const isYoutubeURL = (url) => {
 export const convertURL = async (url) => {
   if (isSpotifyURL(url)) {
     const youtube_url = await fetch(
-      `https://api.song.link/v1-alpha.1/links?url=${url}&userCountry=EN`
+      `https://api.song.link/v1-alpha.1/links?url=${url}&userCountry=EN&key=${process.env.SONGLINK_KEY}`
     )
       .then((res) => res.json())
       .then((res) => res.linksByPlatform.youtube?.url);
@@ -23,7 +23,7 @@ export const convertURL = async (url) => {
     return youtube_url;
   } else if (isYoutubeURL(url)) {
     const spotify_url = await fetch(
-      `https://api.song.link/v1-alpha.1/links?url=${url}&userCountry=EN`
+      `https://api.song.link/v1-alpha.1/links?url=${url}&userCountry=EN&key=${process.env.SONGLINK_KEY}`
     )
       .then((res) => res.json())
       .then((res) => res.linksByPlatform.spotify?.url);
