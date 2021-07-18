@@ -5,11 +5,10 @@ export const isSpotifyURL = (url) => {
 };
 
 export const isYoutubeURL = (url) => {
-  return (
-    url.includes("https://youtube.com/watch") ||
-    url.includes("https://youtu.be/") ||
-    url.includes("https://music.youtube.com/watch")
+  const youtube_link_regex = new RegExp(
+    /(?:http?s?:\/\/)?(?:www.)?(?:m.)?(?:music.)?youtu(?:\.?be)(?:\.com)?(?:(?:\w*.?:\/\/)?\w*.?\w*-?.?\w*\/(?:embed|e|v|watch|.*\/)?\??(?:feature=\w*\.?\w*)?&?(?:v=)?\/?)([\w\d_-]{11})(?:\S+)?/gm
   );
+  return youtube_link_regex.test(url);
 };
 
 export const fetchSongLink = async (url) => {
