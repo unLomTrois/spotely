@@ -1,6 +1,7 @@
 import Telegraf from "telegraf";
 import isUrl from "is-url";
-import { convertURL, isSpotifyURL, isYoutubeURL } from "./utils.js";
+import { isSpotifyURL, isYoutubeURL } from "./utils.js";
+import { convertURL } from "./app.js";
 
 const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN);
 
