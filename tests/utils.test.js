@@ -8,6 +8,12 @@ describe("link validation", () => {
       ).toBe(true);
     });
 
+    test("no substrings", () => {
+      expect(
+        isYoutubeURL("https://redirect.to/site=https://youtube.com/watch?v=xUNqsfFUwhY&feature=share")
+      ).toBe(false);
+    });
+
     test("youtube link must have watch query with v param", () => {
       expect(isYoutubeURL("https://youtube.com/")).toBe(false);
     });
@@ -53,7 +59,13 @@ describe("link validation", () => {
         isSpotifyURL("https://open.spotify.com/track/6dGnYIeXmHdcikdzNNDMm2")
       ).toBe(true);
     });
-    
+
+    test("no substrings", () => {
+      expect(
+        isYoutubeURL("https://redirect.to/site=https://open.spotify.com/track/6dGnYIeXmHdcikdzNNDMm2")
+      ).toBe(false);
+    });
+
     test("spotify link must have track with track id", () => {
       expect(isSpotifyURL("https://open.spotify.com/")).toBe(false);
       expect(isSpotifyURL("https://open.spotify.com/track/")).toBe(false);
