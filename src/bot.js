@@ -49,23 +49,29 @@ bot.on("text", async (ctx) => {
   await ctx.reply(res || "Ничего не найдено 😓");
 });
 
-// bot.on('inline_query', (ctx) => {
-//   const result = []
-//   // Explicit usage
+bot.on(
+  "inline_query",
+  async ({ inlineQuery: { query }, answerInlineQuery }) => {
+    if (isUrl(query) && (isYoutubeURL(query) || isSpotifyURL(query))) {
+      const { title, url, thumb_url } = await convertURL(query);
 
-//   result.push({
-//     type: 'video',
-//     id: 0,
-//     title: "lol",
-//     description: "desc",
-//     video_url: "https://youtu.be/Y36b8_WFejI",
-//     mime_type: "video/mp4",
-//     thumb_url: "https://i.ytimg.com/vi/Y36b8_WFejI/default.jpg",
-//     input_message_content: { message_text: "https://youtu.be/Y36b8_WFejI" }
-//   })
-
-//   // Using context shortcut
-//   ctx.answerInlineQuery(result)
-// })
+      return await answerInlineQuery(
+        [
+          {
+            id: 0,
+            type: "video",
+            mime_type: "video/mp4",
+            title,
+            // description: "desc",
+            video_url: url,
+            thumb_url,
+            input_message_content: { message_text: url },
+          },
+        ],
+        { cache_time: 3600 }
+      );
+    }
+  }
+);
 
 export { bot };
