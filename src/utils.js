@@ -6,9 +6,9 @@ export const isSpotifyURL = (url) => {
 
 export const isYoutubeURL = (url) => {
   return (
-    url.includes("youtube.com/watch") ||
-    url.includes("youtu.be/") ||
-    url.includes("music.youtube.com/watch")
+    url.includes("https://youtube.com/watch") ||
+    url.includes("https://youtu.be/") ||
+    url.includes("https://music.youtube.com/watch")
   );
 };
 
