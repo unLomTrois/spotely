@@ -19,11 +19,11 @@ export const fetchSongLink = async (url) => {
 };
 
 export const parseSongLinkData = async (data, target_platform) => {
-  const unique_id = data.linksByPlatform[target_platform].entityUniqueId;
+  const { url, entityUniqueId: unique_id } =
+    data.linksByPlatform[target_platform];
   const { title, thumbnailUrl: thumb_url } = data.entitiesByUniqueId[unique_id];
-  const url = data.linksByPlatform.youtube.url;
 
-  return { title, thumb_url, url };
+  return { title, url, thumb_url };
 };
 
 export const convertURL = async (url) => {
