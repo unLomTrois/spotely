@@ -9,13 +9,15 @@
     "node": "16.x"
   },
   "scripts": {
-    "start": "node src/index.js"
+    "start": "node src/index.js",
+    "test": "node --experimental-vm-modules node_modules/.bin/jest"
   },
   "devDependencies": {
     "@types/is-url": "^1.2.28",
     "@types/js-base64": "^3.0.0",
     "@types/node": "^14.0.26",
-    "@types/node-fetch": "^2.5.7"
+    "@types/node-fetch": "^2.5.7",
+    "jest": "^27.0.6"
   },
   "dependencies": {
     "get-video-id": "^3.1.5",
