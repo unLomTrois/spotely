@@ -12,22 +12,30 @@ export const isYoutubeURL = (url) => {
   );
 };
 
+export const fetchSongLink = async (url) => {
+  return await fetch(
+    `https://api.song.link/v1-alpha.1/links?url=${url}&userCountry=EN&key=${process.env.SONGLINK_KEY}`
+  ).then((res) => res.json());
+};
+
+export const parseSongLinkData = async (data, target_platform) => {
+  const unique_id = data.linksByPlatform[target_platform].entityUniqueId;
+  const { title, thumbnailUrl: thumb_url } = data.entitiesByUniqueId[unique_id];
+  const url = data.linksByPlatform.youtube.url;
+
+  return { title, thumb_url, url };
+};
+
 export const convertURL = async (url) => {
+  const data = await fetchSongLink(url);
+
+  let target_platform;
+
   if (isSpotifyURL(url)) {
-    const youtube_url = await fetch(
-      `https://api.song.link/v1-alpha.1/links?url=${url}&userCountry=EN&key=${process.env.SONGLINK_KEY}`
-    )
-      .then((res) => res.json())
-      .then((res) => res.linksByPlatform.youtube?.url);
-
-    return youtube_url;
+    target_platform = "youtube";
   } else if (isYoutubeURL(url)) {
-    const spotify_url = await fetch(
-      `https://api.song.link/v1-alpha.1/links?url=${url}&userCountry=EN&key=${process.env.SONGLINK_KEY}`
-    )
-      .then((res) => res.json())
-      .then((res) => res.linksByPlatform.spotify?.url);
-
-    return spotify_url;
+    target_platform = "spotify";
   }
+
+  return parseSongLinkData(data, target_platform);
 };
