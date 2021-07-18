@@ -1,7 +1,10 @@
 import fetch from "node-fetch";
 
 export const isSpotifyURL = (url) => {
-  return url.includes("https://open.spotify.com/track/");
+  const spotify_link_regex = new RegExp(
+    /https?:\/\/open.spotify.com\/(track)\/[a-zA-Z0-9]+(\/playlist\/[a-zA-Z0-9]+|)/
+  );
+  return spotify_link_regex.test(url);
 };
 
 export const isYoutubeURL = (url) => {
