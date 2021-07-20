@@ -53,7 +53,7 @@ bot.on("text", async (ctx) => {
     console.error(err);
   }
 
-  await ctx.reply(res.url || "Ничего не найдено 😓");
+  await ctx.reply(res?.url || "Ничего не найдено 😓");
 });
 
 bot.on(
