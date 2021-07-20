@@ -26,7 +26,8 @@
     "js-base64": "^3.2.4",
     "node-fetch": "^2.6.1",
     "spotify-uri": "^2.0.0",
-    "telegraf": "^3.38.0"
+    "telegraf": "^3.38.0",
+    "telegraf-i18n": "^6.6.0"
   },
   "author": {
     "name": "unLomTrois",
