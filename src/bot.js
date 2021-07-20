@@ -45,7 +45,13 @@ bot.on("text", async (ctx) => {
     return;
   }
 
-  const res = await (await convertURL(url)).url;
+  let res;
+
+  try {
+    res = await convertURL(url);
+  } catch (err) {
+    console.error(err)
+  }
 
   await ctx.reply(res || "Ничего не найдено 😓");
 });
