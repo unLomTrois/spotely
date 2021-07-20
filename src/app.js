@@ -3,12 +3,14 @@ import { isSpotifyURL, isYoutubeURL } from "./utils.js";
 
 export const fetchSongLink = async (url) => {
   return await fetch(
-    `https://api.song.link/v1-alpha.1/links?url=${url}&userCountry=EN&key=${process.env.SONGLINK_KEY}`
+    `https://api.song.link/v1-alpha.1/links?url=${url}&userCountry=RU&key=${process.env.SONGLINK_KEY}`
   ).then((res) => res.json());
 };
 
 export const parseSongLinkData = (data, target_platform) => {
-  console.log(data);
+  if (data.linksByPlatform[target_platform] == undefined) {
+    throw new Error("the video is not available on the platform")
+  }
 
   const { url, entityUniqueId: unique_id } =
     data.linksByPlatform[target_platform];
