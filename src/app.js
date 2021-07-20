@@ -9,7 +9,10 @@ export const fetchSongLink = async (url) => {
 
 export const parseSongLinkData = (data, target_platform) => {
   if (data.linksByPlatform[target_platform] == undefined) {
-    throw new Error("the video is not available on the platform")
+    const err = new Error("the video is not available on the platform")
+    err.name = target_platform == "spotify" ? "Spotify" : "Youtube"
+    
+    throw err
   }
 
   const { url, entityUniqueId: unique_id } =

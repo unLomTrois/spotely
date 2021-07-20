@@ -50,7 +50,7 @@ bot.on("text", async (ctx) => {
   try {
     res = await convertURL(url);
   } catch (err) {
-    console.error(err)
+    console.error(err);
   }
 
   await ctx.reply(res || "Ничего не найдено 😓");
@@ -60,7 +60,34 @@ bot.on(
   "inline_query",
   async ({ inlineQuery: { query }, answerInlineQuery }) => {
     if (isUrl(query) && (isYoutubeURL(query) || isSpotifyURL(query))) {
-      const { title, url, thumb_url } = await convertURL(query);
+      let res;
+
+      try {
+        res = await convertURL(query);
+      } catch (err) {
+        console.error(err);
+
+        let err_message;
+        if (err.message == "the video is not available on the platform")
+          err_message = `Видео не было найдено на платформе ${err.name}`;
+
+        return await answerInlineQuery(
+          [
+            {
+              id: 0,
+              type: "article",
+              title: "Ничего не найдено",
+              description: err_message || "Неизвестная ошибка",
+              input_message_content: {
+                message_text: `По запросу ${query} ничего не найдено`,
+              },
+            },
+          ],
+          { cache_time: 3600 }
+        );
+      }
+
+      const { title, url, thumb_url } = res;
 
       return await answerInlineQuery(
         [
@@ -69,7 +96,6 @@ bot.on(
             type: "video",
             mime_type: "video/mp4",
             title,
-            // description: "desc",
             video_url: url,
             thumb_url,
             input_message_content: { message_text: url },
