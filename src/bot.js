@@ -1,14 +1,25 @@
 import Telegraf from "telegraf";
+import session from "telegraf/session.js";
+
+import I18n from "telegraf-i18n";
+import path from "path";
 import isUrl from "is-url";
 import { isSpotifyURL, isYoutubeURL } from "./utils.js";
 import { convertURL } from "./app.js";
 
 const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN);
 
-const start_help_text =
-  "🙁 Друг отправил трек со спотифая, но у тебя его нет? Или наоборот?\n" +
-  "🦥Лень постоянно копировать название трека и искать его вручную?\n" +
-  "😎Просто скинь ссылку на трек, и я найду его за тебя.";
+const __dirname = path.resolve();
+
+const i18n = new I18n({
+  defaultLanguage: "en",
+  useSession: true,
+  sessionName: "session",
+  directory: path.resolve(__dirname, "locales"),
+});
+
+bot.use(session());
+bot.use(i18n.middleware());
 
 bot.use(async (_, next) => {
   const start = new Date().getTime();
@@ -17,32 +28,41 @@ bot.use(async (_, next) => {
   console.log("Response time: %sms", ms);
 });
 
-bot.start(async (ctx) => {
-  await ctx.reply(start_help_text);
+bot.start(() => I18n.reply("greeting"));
+
+bot.command("ru", ({ i18n, reply }) => {
+  i18n.locale("ru");
+
+  return reply(i18n.t("greeting"));
 });
 
-bot.help((ctx) => ctx.reply(start_help_text));
+bot.command("en", ({ i18n, reply }) => {
+  i18n.locale("en-US");
 
-bot.on("text", async (ctx) => {
-  const message = ctx.message?.text;
+  return reply(i18n.t("greeting"));
+});
 
+bot.help(({ reply, i18n }) => {
+  return reply(i18n.t("greeting"));
+});
+
+bot.on("text", async ({ reply, i18n, message: { text: message } }) => {
   console.log(message);
 
   if (message == undefined) {
-    await ctx.reply("Вы отправили не ссылку 😕");
-    return;
+    return await reply(i18n.t("wrong_link"));
   }
 
   if (!isUrl(message)) {
-    await ctx.reply("Вы отправили не ссылку 😕");
-    return;
+    return await reply(i18n.t("wrong_link"));
   }
 
   const url = message;
 
   if (!isYoutubeURL(url) && !isSpotifyURL(url)) {
-    await ctx.reply("Отправьте ссылку на spotify, youtube или youtube music");
-    return;
+    return await reply(
+      "Отправьте ссылку на spotify, youtube или youtube music"
+    );
   }
 
   let res;
@@ -53,7 +73,7 @@ bot.on("text", async (ctx) => {
     console.error(err);
   }
 
-  await ctx.reply(res?.url || "Ничего не найдено 😓");
+  await reply(res?.url || "Ничего не найдено 😓");
 });
 
 bot.on(
