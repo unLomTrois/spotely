@@ -24,7 +24,7 @@
     "get-video-id": "^3.1.5",
     "is-url": "^1.2.4",
     "js-base64": "^3.2.4",
-    "node-fetch": "^2.6.1",
+    "node-fetch": "^2.6.7",
     "spotify-uri": "^2.0.0",
     "telegraf": "^3.38.0"
   },
